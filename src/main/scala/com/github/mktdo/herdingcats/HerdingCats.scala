@@ -16,10 +16,21 @@ object Monoid {
   }
 }
 
+trait FoldLeft[F[_]] {
+  def foldLeft[A, B](xs: List[A], b: B, f: (B, A) => B): B
+}
+
+object FoldLeft {
+  implicit val FoldLeftList: FoldLeft[List] = new FoldLeft[List] {
+    def foldLeft[A, B](xs: List[A], b: B, f: (B, A) => B): B = xs.foldLeft(b)(f)
+  }
+}
+
 object HerdingCats {
 
-  def sum[A: Monoid](xs: List[A]): A = {
+  def sum[M[_]: FoldLeft, A: Monoid](xs: List[A]): A = {
     val m = implicitly[Monoid[A]]
-    xs.foldLeft(m.mzero)(m.mappend)
+    val fl = implicitly[FoldLeft[M]]
+    fl.foldLeft(xs, m.mzero, m.mappend)
   }
 }

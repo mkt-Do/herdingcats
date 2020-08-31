@@ -1,7 +1,7 @@
 package com.github.mktdo.herdingcats
 
 import com.github.mktdo.herdingcats.HerdingCats.sum
-import com.github.mktdo.herdingcats.Monoid
+import com.github.mktdo.herdingcats.{ FoldLeft, Monoid }
 import org.scalatest.flatspec.AnyFlatSpec
 
 class HerdingCatsSpec extends AnyFlatSpec {
@@ -22,6 +22,9 @@ class HerdingCatsSpec extends AnyFlatSpec {
       def mappend(a1: Int, a2: Int): Int = a1 * a2
       def mzero: Int = 1
     }
-    assert(sum(l)(multiMonoid) == 24)
+    val fl: FoldLeft[List] = new FoldLeft[List] {
+      def foldLeft[A, B](xs: List[A], b: B, f: (B, A) => B): B = xs.foldLeft(b)(f)
+    }
+    assert(sum(l)(fl, multiMonoid) == 24)
   }
 }
