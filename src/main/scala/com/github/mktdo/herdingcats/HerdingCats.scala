@@ -1,7 +1,9 @@
 package com.github.mktdo.herdingcats
 
-trait Monoid[A] {
-  def mappend(a1: A, a2: A): A
+import simulacrum._
+
+@typeclass trait Monoid[A] {
+  @op("|+|") def mappend(a1: A, a2: A): A
   def mzero: A
 }
 

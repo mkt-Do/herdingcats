@@ -27,4 +27,10 @@ class HerdingCatsSpec extends AnyFlatSpec {
     }
     assert(sum(l)(fl, multiMonoid) == 24)
   }
+
+  "Using operator" should "sum two arguments" in {
+    import com.github.mktdo.herdingcats.Monoid.ops._
+    assert((3 |+| 4) == 7)
+    assert(("a" |+| "b") == "ab")
+  }
 }
